@@ -1,0 +1,56 @@
+.closing-container {
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 100px 24px;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.closing-eng-title {
+  font-family: 'Carrois Gothic', sans-serif;
+  margin-bottom: 30px;
+  color: #1a1a1a;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+.closing-main-text {
+  margin-bottom: 50px;
+  color: #555;
+  font-size: 15px;
+  font-weight: 300;
+  line-height: 2;
+}
+
+.contact-button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 60px;
+}
+
+.contact-btn {
+  display: inline-block;
+  width: 200px;
+  padding: 8px 16px;
+  background-color: #f1f1f1;
+  color: #333;
+  font-size: 13px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.contact-btn:hover {
+  background-color: #e8e8e8 !important;
+}
+
+.closing-footer-text {
+  margin-bottom: 30px;
+  color: #888;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.8;
+  letter-spacing: -0.01em;
+}

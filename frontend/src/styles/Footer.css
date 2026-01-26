@@ -1,0 +1,42 @@
+.share-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: auto;
+  background-color: #393534;
+  padding: 70px 0 80px
+}
+
+.share-button-content {
+  display: flex;
+  gap: 24px;
+}
+
+.share-kakao {
+  width: 35px;
+  height: 35px;
+}
+
+.share-link {
+  width: 18px;
+  height: 18px;
+  margin: 0 auto;
+}
+
+.btn-copy {
+  width: 35px;
+  height: 35px;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.copyright {
+  margin-top: 20px;
+  color: #888;
+  font-size: 12px;
+}
+
+.btn-kakao .share-kakao {
+  cursor: pointer;
+}

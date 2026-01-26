@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role { 
+  ADMIN 
+  OWNER 
+}
+
+model User {
+  id String @id @default(cuid())
+  email String? @unique
+  password String?
+  role Role @default(OWNER)
+  createdAt DateTime @default(now())
+  invitations Invitation[]
+  snsAccounts SnsAccount[]
+}
+
+model SnsAccount {
+  id Int @id @default(autoincrement())
+  provider String
+  snsId String
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  @@unique([provider, snsId])
+}
+
+model AdminUser {
+  id String @id @default(cuid())
+  username String @unique
+  password String 
+  isActive Boolean @default(true)
+  isLoggedIn Boolean @default(false)
+  failedLoginAttempts Int @default(0)
+  lastLoginAttempt DateTime?
+  lastLoginAt DateTime?
+  ipAddress String?
+  refreshToken String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Invitation {
+  id String @id @default(cuid())
+  ownerId String
+  owner User @relation(fields: [ownerId], references: [id])
+  title String
+  slug String @unique
+  dateTime DateTime
+  venue String?
+  address String?
+  coverUrl String?
+  isPublic Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  photos Photo[]
+  guestBooks Guestbook[]
+  rsvps Rsvp[]
+  @@index([ownerId])
+}
+
+model Guestbook {
+  id String @id @default(cuid())
+  invitationId String
+  invitation Invitation @relation(fields: [invitationId], references: [id])
+
+  name String
+  message String @db.VarChar(300)
+
+  passwordHash String?
+
+  userId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([invitationId])
+  @@index([userId])
+}
+
+model Photo {
+  id String @id @default(cuid())
+  invitationId String
+  invitation Invitation @relation(fields: [invitationId], references: [id])
+  imageUrl String
+  caption String?
+  order Int?
+  createdAt DateTime @default(now())    
+}
+
+model Rsvp {
+  id Int @id @default(autoincrement())
+  invitation Invitation @relation(fields: [invitationId], references: [id])
+  invitationId String
+  attending Boolean
+  side String
+  name String
+  phone String?
+  companions Int @default(0)
+  userId Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([invitationId, phone])
+}

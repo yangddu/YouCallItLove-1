@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Node.js 서버 디버깅",
+            "program": "index.js", // 서버 시작 파일명 (예: index.js, app.js 등)으로 수정하세요
+            "skipFiles": ["<node_internals>/**"],
+            "envFile": "${workspaceFolder}/.env" // .env 파일의 환경변수를 불러옵니다
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "localhost에 대해 Chrome 시작",
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}

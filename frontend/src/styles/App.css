@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Instrument+Serif:ital@0;1&family=Pinyon+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Carrois+Gothic&family=DM+Serif+Text:ital@0;1&family=Instrument+Serif:ital@0;1&family=Pinyon+Script&display=swap');
+#root {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 450px;
+}
+
+:root {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 450px;
+  --font-serif: 'Cormorant Garamond', serif; 
+  --font-sans: 'Noto Sans KR', sans-serif;   
+  --font-wedding: 'Great Vibes', cursive;
+
+  --fs-title: clamp(2.5rem, 10vw, 3.5rem);   
+  --fs-subtitle: 14px;                       
+  --fs-body: 16px;                           
+  --fs-date: 1.1rem;                         
+
+  --ls-wide: 0.2em;                          
+  --op-soft: 0.8;                            
+
+  --wedding-pink: #FFB6BE; 
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+textarea {
+  resize: vertical;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.font-title {
+  font-family: var(--font-wedding);
+  font-size: 3rem;
+}
+
+.font-subtitle {
+  font-family: var(--font-sans);
+  font-size: var(--fs-subtitle);
+  opacity: var(--op-soft);
+  text-transform: uppercase;
+}
+
+.font-detail {
+  font-family: var(--font-sans);
+  font-size: var(--fs-date);
+  line-height: 1.8;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 450px;
+  text-align: center;
+}
+
+section {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.invitation-container {
+  max-width: 450px;
+  margin: 0 auto;
+  background-color: var(--wedding-white);
+}
+
+.section-dark {
+  padding: 60px 20px 0;
+  background-color: var(--wedding-black);
+  color: var(--wedding-white);
+  text-align: center;
+}
+
+.section-pink {
+  padding: 60px 20px;
+  background-color: var(--wedding-pink);
+  text-align: center;
+}
+
+.section-white {
+  padding: 60px 20px;
+  background-color: var(--wedding-white);
+  text-align: center;
+}
+
+.section-transparent {
+  background-color: #fff;
+}
+
+.btn-round {
+  display: inline-block;
+  margin: 10px 0;
+  padding: 10px 30px;
+  background: transparent;
+  border-radius: 25px;
+  border: 1px solid currentColor;
+  cursor: pointer;
+}
+
+.copy-btn {
+  padding: 5px 15px;
+  background: #333;
+  color: white;
+  font-size: 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.visual {
+  color: #333;
+}

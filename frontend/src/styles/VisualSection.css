@@ -1,0 +1,31 @@
+
+.afterInfo-image {
+    background-image: url('https://d308a0brqwepvz.cloudfront.net/wedding/visual02.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 280px;
+    height: 230px;
+    margin-top: -50px;
+}
+.invitation-top-section {
+    position: absolute;
+    top: 40px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 30px;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.invitation-top-section .top-left-info {
+    text-align: left;
+}
+
+.invitation-top-section .top-right-info {
+    text-align: right;
+}
+.invitation-info .invitation-info-en{
+    font-family: "DM Serif Text", serif;
+}

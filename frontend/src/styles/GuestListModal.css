@@ -1,0 +1,159 @@
+.kakao-login-box {
+  margin: 20px 0;
+  padding: 30px 20px;
+  background-color: #fdfdfd;
+  text-align: center;
+  border: 1px solid #f0f0f0;
+  border-radius: 15px;
+}
+
+.kakao-login-box p {
+  margin-bottom: 20px;
+  color: #777;
+  font-size: 14px;
+}
+
+.guest-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.mini-guest-card {
+  padding: 15px 5px;
+  border-bottom: 1px solid #f7f7f7;
+}
+
+.mini-name {
+  margin-bottom: 5px;
+  color: #333;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mini-text {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px); 
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #ffffff;
+  width: 100%;
+  border-radius: 24px 24px 0 0; 
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
+  animation: slideUp 0.4s ease-out;
+}
+
+.guest-list-modal-content {
+  height: 550px;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-header {
+  display: flex;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.guest-list-header {
+  position: static;
+  padding-bottom: 20px;
+}
+
+.header-title {
+  text-align: left;
+}
+
+.header-title h3 {
+  margin-bottom: 4px;
+  color: #222;
+  font-size: 16px;
+}
+
+.count-tag {
+  color: #888;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.modal-body {
+  overflow: auto;
+}
+
+.guest-list-body {
+  padding-top: 10px;
+}
+
+.guest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: auto;
+}
+
+.guest-card {
+  padding: 20px;
+  background: #fcfcfc;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 0 24px;
+}
+
+.guest-name {
+  color: #333;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.guest-date {
+  color: #b0b0b0;
+  font-size: 13px;
+}
+
+.card-content {
+  padding: 10px 20px;
+  color: #555;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.close-btn {
+  background: none;
+  color: #ccc;
+  border: none;
+  cursor: pointer;
+}
+
+.empty-state {
+  font-size: 13px;
+}

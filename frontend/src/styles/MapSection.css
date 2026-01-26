@@ -1,0 +1,99 @@
+.map-section-dark {
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 80px 20px;
+  background-color: #393534;
+  color: #ffffff;
+  text-align: left;
+}
+
+.my-section-dark .location-title {
+  font-family: 'Carrois Gothic', sans-serif;
+}
+
+.map-header {
+  margin-bottom: 30px;
+  padding: 0 10px;
+}
+
+.location-title {
+  font-family: 'Carrois Gothic', sans-serif;
+  margin-bottom: 5px;
+  font-size: 32px;
+  letter-spacing: -0.01em;
+}
+
+.location-subtitle {
+  color: #a8a39d;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.map-wrapper {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 40px;
+}
+
+.map-section {
+  width: 100%;
+  height: 500px;
+}
+
+.naver-map {
+  width: 100%;
+  height: 350px;
+  border-radius: 4px;
+}
+
+.transport-list {
+  padding: 0 10px;
+}
+
+.transport-item {
+  display: flex;
+  padding: 20px 0;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.2); /* 이미지 속 얇은 선 */
+}
+
+.transport-item:last-child {
+  border-bottom: none;
+}
+
+.transport-item .label {
+  width: 70px;
+  color: #a8a39d;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.transport-item .info {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.transport-item .transport-info-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.map-app-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 30px;
+  padding-right: 10px;
+}
+
+.map-app-buttons button {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+}

@@ -1,0 +1,92 @@
+.account-container-dark {
+  padding: 100px 24px;
+  background-color: #393534;
+  color: #ffffff;
+  text-align: left;
+}
+
+.account-header h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.account-header p {
+  margin-bottom: 60px;
+  color: #a8a39d;
+  font-size: 14px;
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+}
+
+.account-accordion-group {
+  border-top: 0.5px solid rgba(255, 255, 255, 0.2);
+}
+
+.accordion-item {
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.2);
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.accordion-header .icon {
+  color: #a8a39d;
+  font-size: 16px;
+}
+
+.accordion-content {
+  padding-bottom: 36px;
+  animation: fadeIn 0.3s ease;
+}
+
+.account-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 24px;
+}
+
+.account-main .relation {
+  display: block;
+  margin-bottom: 6px;
+  color: #777; 
+  font-size: 12px;
+}
+
+.account-main .details {
+  font-size: 13px;
+}
+
+.account-main .owner {
+  margin-right: 12px;
+  font-weight: 400;
+}
+
+.account-main .bank-info {
+  color: #ccc;
+  font-weight: 300;
+}
+
+.copy-btn {
+  padding: 6px 12px;
+  /* background-color: #f1f1f1; */
+  /* color: #333; */
+  font-size: 13px;
+  border: none;
+  border-radius: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

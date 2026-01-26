@@ -1,0 +1,17 @@
+export const WEATHER_DESC_KO = {
+  Clear: '맑음 ☀️',
+  Clouds: '구름 많음 ☁️',
+  Rain: '비 ☔',
+  Drizzle: '이슬비 🌦️',
+  Thunderstorm: '천둥번개 ⚡',
+  Snow: '눈 ❄️',
+  Mist: '안개 🌫️',
+  Smoke: '연기 💨',
+  Haze: '실안개 🌫️',
+  Dust: '먼지 🌪️',
+  Fog: '짙은 안개 🌫️',
+  Sand: '황사 🏜️',
+  Ash: '화산재 🌋',
+  Squall: '돌풍 🌬️',
+  Tornado: '토네이도 🌪️',
+};

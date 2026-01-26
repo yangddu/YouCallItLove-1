@@ -1,0 +1,175 @@
+.visual {
+  position: relative;
+  height: 100vh;
+}
+
+.stage {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+}
+
+.bg-color {
+  background: #fff;
+  opacity: 1;
+}
+
+.bg-photo {
+  background: url("/wedding.jpg") center/cover no-repeat;
+  opacity: 0;
+  transform: translateY(100%);
+  transition: transform 900ms cubic-bezier(.22,.61,.36,1),
+              opacity 900ms ease;
+}
+
+.introWrap {
+  position: relative;
+  place-content: center;
+  top: 50%;
+  transform: translateY(-50%);
+  gap: 10px;
+  height: 100%;
+  color: #333;
+  text-align: center;
+  z-index: 2;
+  transition: transform 900ms cubic-bezier(.22,.61,.36,1),
+              opacity 600ms ease;
+}
+
+.introWrap.hide {
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: transform 900ms cubic-bezier(.22,.61,.36,1),
+              opacity 600ms ease;
+}
+
+.intro-upper-info {
+  position: absolute;
+  top: 20px;
+  width: 100%;
+  color: #333;
+  font-size: 13px;
+  text-align: center;
+}
+
+.intro-bottom-info {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  color: #333;
+  font-size: 13px;
+  text-align: center;
+}
+
+.line {
+  opacity: 0;
+  transform: translateY(14px);
+  animation-name: lineUpOnce;
+  animation-timing-function: cubic-bezier(.22,.61,.36,1);
+  animation-fill-mode: forwards;
+}
+
+@keyframes lineUpOnce {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reveal: switch backgrounds */
+.stage.reveal .bg-color {
+  opacity: 0;
+  transform: translateY(-100%); 
+  transition: transform 900ms cubic-bezier(.22,.61,.36,1),
+              opacity 900ms ease;
+}
+
+.stage.reveal .bg-photo {
+  opacity: 1;
+  transform: translateY(0); 
+}
+
+.afterInfo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.afterInfo.show {
+  opacity: 1;
+  color: #333;
+}
+
+.afterInfo.show img {
+  height: 100vh;
+}
+
+.invitation-title {
+  position: absolute;
+  width: 100%;
+  top: 35%;
+  font-size: 40px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.name {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.name .section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.invitation-info {
+  position: absolute;
+  bottom: 20px;
+  transform: translateY(140%);
+  width: 100%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.invitation-info .invitation-info-en {
+  font-family: "Pinyon Script", cursive !important;
+  margin-bottom: 20px;
+  font-size: 30px;
+}
+.invitation-info .invitation-info-kr {
+  font-size: 13px;
+}
+.afterInfo.show {
+  animation: stageSlideUp 900ms cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+@keyframes infoSlideUp {
+  to {
+    transform: translateY(0);
+  }
+}
+
+.afterInfo.show .invitation-info {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 900ms cubic-bezier(.22,.61,.36,1),
+              opacity 600ms ease;
+}
