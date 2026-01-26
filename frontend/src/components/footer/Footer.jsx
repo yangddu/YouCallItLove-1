@@ -5,7 +5,7 @@ import { CDN_URL } from '@constants/cdn';
 import '@styles/Footer.css';
 
 const Footer = () => {
-  const { Kakao } = window; // 브라우저 window 객체에서 Kakao 추출
+  const { Kakao } = window;
   const url = CDN_URL;
   const showAlert = useAlert();
 

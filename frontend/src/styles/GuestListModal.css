@@ -59,7 +59,8 @@
 }
 
 .guest-list-modal-content {
-  height: 550px;
+  max-height: 550px;
+  height: 250px;
 }
 
 @keyframes slideUp {

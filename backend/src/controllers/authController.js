@@ -9,6 +9,8 @@ const {
   KAKAO_REDIRECT_URI,
 } = require("../../config/kakao");
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const loginWithKakao = (req, res) => {
   const scope = encodeURIComponent(
     "profile_nickname,profile_image,account_email",
@@ -26,8 +28,8 @@ const kakaoCallback = asyncHelper(async (req, res) => {
 
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     path: "/",
     maxAge: 1000 * 60 * 60 * 24 * 7,
   };
@@ -35,7 +37,8 @@ const kakaoCallback = asyncHelper(async (req, res) => {
   res.cookie("accessToken", accessToken, cookieOptions);
   res.cookie("refreshToken", refreshToken, cookieOptions);
 
-  return res.redirect("http://localhost:5173/auth/callback");
+  const frontendUrl = process.env.FRONTEND_URL || "https://our-0613.co.kr";
+  return res.redirect(`${frontendUrl}/auth/callback`);
 });
 
 const refresh = asyncHelper(async (req, res) => {
@@ -60,7 +63,11 @@ const getMe = asyncHelper(async (req, res) => {
     const userData = authService.verifyAccessToken(token);
     return sendSuccess(res, userData, "내 정보 조회 성공");
   } catch (error) {
-    res.clearCookie("accessToken", { path: "/" });
+    res.clearCookie("accessToken", {
+      path: "/",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+    });
 
     throw error;
   }

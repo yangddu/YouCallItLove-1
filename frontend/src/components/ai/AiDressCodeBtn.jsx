@@ -35,7 +35,6 @@ const AiDressCodeBtn = () => {
           🌤️
         </motion.button>
       </div>
-
       <AnimatePresence>
         {isModalOpen && (
           <>

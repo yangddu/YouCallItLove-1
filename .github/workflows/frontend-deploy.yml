@@ -1,0 +1,46 @@
+name: Frontend Deploy
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**' 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Github Repository 불러오기
+        uses: actions/checkout@v4
+
+      - name: Node 설치
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 의존성 설치 및 빌드
+        working-directory: ./frontend 
+        run: |
+          npm ci
+          # 중요: 빌드 시점에 환경변수 주입
+          echo "${{ secrets.FRONTEND_ENV }}" > .env.production
+          npm run build
+
+      - name: EC2 기존 파일 삭제
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            sudo rm -rf /usr/share/nginx/html/*
+
+      - name: 빌드된 파일(dist)을 EC2로 전송 (SCP)
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: "frontend/dist/*"
+          target: "/usr/share/nginx/html"
+          strip_components: 2 

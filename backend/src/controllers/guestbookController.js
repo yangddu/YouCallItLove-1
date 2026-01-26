@@ -10,7 +10,6 @@ const getList = asyncHelper(async (req, res) => {
       slug,
       limit,
     });
-
     return sendSuccess(res, data, "페이징 목록 조회 성공");
   } else {
     const data = await guestbookService.getAllGuestbooks({ slug });

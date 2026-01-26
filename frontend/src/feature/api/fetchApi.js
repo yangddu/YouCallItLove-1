@@ -16,7 +16,7 @@ export const fetchApi = async (url, method, options = {}, timeout = 10000) => {
     ignoreError,
   } = options;
 
-  const endpoint = import.meta.env.VITE_API_URL ?? 'http://localhost:5173';
+  const endpoint = import.meta.env.VITE_API_URL;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
@@ -56,7 +56,6 @@ export const fetchApi = async (url, method, options = {}, timeout = 10000) => {
       } catch {
         errorData = { message: text };
       }
-
       throw new ApiError(
         errorData.message ||
           errorData.title ||

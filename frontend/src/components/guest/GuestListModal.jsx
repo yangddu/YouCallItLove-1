@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { fetchApi } from '@/feature/api/fetchApi';
+import { useParams } from '@tanstack/react-router';
 import '@styles/GuestListModal.css';
 
 const GuestListModal = ({ isOpen, onClose }) => {
   const [guestList, setGuestList] = useState([]);
+  const { slug } = useParams({ from: '/$slug' });
 
   useEffect(() => {
     if (isOpen) {
@@ -11,7 +13,7 @@ const GuestListModal = ({ isOpen, onClose }) => {
 
       const loadData = async () => {
         try {
-          const res = await fetchApi(`/api/guestbook?slug=test-202512`, 'GET');
+          const res = await fetchApi(`/api/guestbook?slug=${slug}`, 'GET');
           setGuestList(res.data.data);
         } catch (e) {
           console.error(e);
@@ -26,7 +28,7 @@ const GuestListModal = ({ isOpen, onClose }) => {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isOpen, slug]);
 
   if (!isOpen) return null;
 
@@ -47,6 +49,7 @@ const GuestListModal = ({ isOpen, onClose }) => {
         </div>
 
         <div className="modal-body guest-list-body">
+          dd: {guestList.length}
           {guestList.length > 0 ? (
             <div className="guest-list">
               {guestList.map((item) => (

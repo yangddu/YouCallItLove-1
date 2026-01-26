@@ -14,4 +14,3 @@ module.exports = {
     KAKAO_TOKEN_URL,
     KAKAO_USER_URL,
 }
-

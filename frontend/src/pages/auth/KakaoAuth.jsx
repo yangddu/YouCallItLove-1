@@ -1,10 +1,11 @@
 import React from 'react';
 
+const baseUrl = import.meta.env.VITE_API_URL;
 const KakaoAuth = () => {
   return (
     <button
       onClick={() => {
-        window.location.href = 'http://localhost:3000/api/auth/kakao';
+        window.location.href = `${baseUrl}/api/auth/kakao`;
       }}
     >
       카카오 로그인

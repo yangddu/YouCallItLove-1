@@ -1,3 +1,4 @@
+import { fetchApi } from '@/feature/api/fetchApi';
 import {
   createContext,
   useCallback,
@@ -5,7 +6,6 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { fetchApi } from '@/feature/api/fetchApi';
 
 export const SessionContext = createContext(undefined);
 

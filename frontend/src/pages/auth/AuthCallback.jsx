@@ -7,16 +7,23 @@ const AuthCallback = () => {
   const { update } = useSessionContext();
   const showAlert = useAlert();
   const isFetched = useRef(false);
+  const savedSlug = sessionStorage.getItem('return_slug');
 
   useEffect(() => {
     if (isFetched.current) return;
     isFetched.current = true;
-    (async () => {
+
+    const navigateToWriteForm = async () => {
       try {
         await fetchApi('/api/auth/kakao/refresh', 'POST');
         await update();
 
-        window.location.replace('/test-202512?write=true');
+        if (savedSlug) {
+          sessionStorage.removeItem('return_slug');
+          window.location.replace(`/${savedSlug}?write=true`);
+        } else {
+          window.location.replace('/');
+        }
       } catch (e) {
         showAlert({
           message: '로그인 세션이 만료되었습니다.\n다시 로그인 해주세요.',
@@ -27,7 +34,8 @@ const AuthCallback = () => {
           },
         });
       }
-    })();
+    };
+    navigateToWriteForm();
   }, []);
 
   return <div className="login-session">로그인 처리 중이에요...</div>;

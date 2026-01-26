@@ -2,6 +2,8 @@ const adminService = require("@services/adminService");
 const { sendSuccess } = require("@src/helpers/responseHelper");
 const asyncHelper = require("@src/helpers/asyncHelper");
 
+const isProduction = process.env.NODE_ENV === "production";
+
 const getMe = asyncHelper(async (req, res) => {
   const adminData = adminService.getAdminProfile(req.user);
   return sendSuccess(res, adminData, "관리자 정보 조회에 성공했습니다.");
@@ -20,8 +22,10 @@ const login = asyncHelper(async (req, res) => {
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    sameSite: "lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
+    path: "/",
   });
 
   return sendSuccess(
@@ -33,7 +37,12 @@ const login = asyncHelper(async (req, res) => {
 
 const logout = asyncHelper(async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
-  res.clearCookie("refreshToken", { path: "/" });
+  res.clearCookie("refreshToken", {
+    path: "/",
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+  });
   if (refreshToken) {
     await adminService.clearSession(refreshToken);
   }
@@ -46,7 +55,10 @@ const refresh = asyncHelper(async (req, res) => {
   const tokens = authService.generateTokens(user);
   res.cookie("refreshToken", tokens.refreshToken, {
     httpOnly: true,
-    sameSite: "lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    path: "/",
   });
   return sendSuccess(
     res,

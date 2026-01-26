@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSessionContext } from '@hooks/useSession';
 import { useAlert } from '@/hooks/useAlert';
 import { fetchApi } from '@/feature/api/fetchApi';
 import '@styles/GuestWriteForm.css';
 
-const GuestWriteForm = ({ isOpen, onClose, onSuccess }) => {
-  const { data: session, status } = useSessionContext();
+const MAX_LENGTH = 200;
+const NAME_MAX_LENGTH = 10;
+
+const GuestWriteForm = ({ isOpen, onClose, onSuccess, invitationId }) => {
+  const { status } = useSessionContext();
   const isIdentified = status === 'authenticated';
   const showAlert = useAlert();
 
@@ -15,32 +18,22 @@ const GuestWriteForm = ({ isOpen, onClose, onSuccess }) => {
     password: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const MAX_LENGTH = 200;
-  const NAME_MAX_LENGTH = 10;
 
   useEffect(() => {
-    if (isOpen) {
-      setFormData({
-        name: '',
-        message: '',
-        password: '',
-      });
+    if (!isOpen) return;
 
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
+    setFormData({ name: '', message: '', password: '' });
+    document.body.style.overflow = 'hidden';
 
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, isIdentified, session]);
+  }, [isOpen]);
 
-  if (!isOpen) return null;
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,7 +50,7 @@ const GuestWriteForm = ({ isOpen, onClose, onSuccess }) => {
     setIsSubmitting(true);
     try {
       const payload = {
-        invitationId: 'cmhn8pgdc0002e4f0n6gldk7e',
+        invitationId: invitationId,
         name: formData.name,
         message: formData.message,
         ...(!isIdentified && { password: formData.password }),
@@ -68,13 +61,12 @@ const GuestWriteForm = ({ isOpen, onClose, onSuccess }) => {
         withCredentials: true,
       });
       if (res.data.success) {
-        if (onSuccess) onSuccess();
-
         showAlert({
           message: '축하해주셔서 감사합니다.\n소중히 읽어볼게요.',
           content: '💌',
           type: 'success',
         });
+        onSuccess?.();
         onClose();
       }
     } catch (error) {
@@ -87,6 +79,8 @@ const GuestWriteForm = ({ isOpen, onClose, onSuccess }) => {
       setIsSubmitting(false);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>

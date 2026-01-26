@@ -17,9 +17,6 @@ import '@styles/index.css';
 export default function MainPage({ inv, guestbooks }) {
   const [showAiBtn, setShowAiBtn] = useState(false);
   const storyRef = useRef(null);
-  const JS_KEY = import.meta.env.VITE_KAKAO_JS_KEY;
-
-  const { data, status } = useSessionContext();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -44,18 +41,14 @@ export default function MainPage({ inv, guestbooks }) {
 
   return (
     <div className="classic-theme-wrapper">
-      <div style={{ color: 'red' }}>
-        {status}
-        {status === 'authenticated' ? '로그인됨' : '로그인 안됨'}
-      </div>
-      <VisualSection img={inv.coverUrl} />
-      <GreetingSection content={guestbooks.text} />
+      <VisualSection img={inv?.coverUrl} />
+      <GreetingSection content={guestbooks?.text} />
       <div ref={storyRef} className="layer">
         <StorySection />
-        <MapSection venue={guestbooks.address} /> {/* 지도 */}
+        <MapSection venue={guestbooks?.address} /> {/* 지도 */}
         <WeddingCalendar /> {/* 캘린더 */}
         <SliderContainer /> {/* 갤러리 */}
-        <GuestbookSection /> {/* 방명록 */}
+        <GuestbookSection invitationId={inv?.data?.id} /> {/* 방명록 */}
         <AccountSection /> {/* 계좌번호 */}
         <ClosingSection />
         <Footer />

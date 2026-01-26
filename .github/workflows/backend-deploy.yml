@@ -1,8 +1,9 @@
+name: Backend Deploy
 on:
   push:
     branches:
       - main
-    paths:
+    paths: 
       - 'backend/**'
 
 jobs:
@@ -34,24 +35,35 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Docker 이미지 생성 및 Push
+      - name: Docker 이미지 생성
         working-directory: ./backend
         run: |
           docker build -t ycil-server .
-          docker tag ycil-server ${{ steps.login-ecr.outputs.registry }}/ycil-server:latest
-          docker push ${{ steps.login-ecr.outputs.registry }}/ycil-server:latest
+      
+      - name: Docker 이미지에 Tag 붙이기
+        run: docker tag ycil-server ${{ steps.login-ecr.outputs.registry }}/ycil-server:latest
+    
+      - name: Docker이미지 ECR에 push
+        run: docker push ${{ steps.login-ecr.outputs.registry }}/ycil-server:latest
 
       - name: SSH로 EC2 접속 및 배포
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
+          envs: REGISTRY
           script: |
-            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
-            docker pull ${{ steps.login-ecr.outputs.registry }}/ycil-server:latest
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $REGISTRY
             docker stop ycil-server || true
             docker rm ycil-server || true
-            docker run -d --name ycil-server -p 3000:3000 ${{ steps.login-ecr.outputs.registry }}/ycil-server:latest
+            docker pull $REGISTRY/ycil-server:latest
+            docker run -d --name ycil-server \
+              -p 3000:3000 \
+              --network backend_default \
+              --env-file /home/ubuntu/YouCallItLove/backend/.env \
+              $REGISTRY/ycil-server:latest
             docker image prune -f

@@ -5,25 +5,30 @@ import { fetchApi } from '@/feature/api/fetchApi';
 import GuestWriteForm from '@/pages/guestbooks/GuestBook';
 import GuestListModal from '@components/guest/GuestListModal.jsx';
 import '@styles/GuestBook.css';
+import { useParams } from '@tanstack/react-router';
 
-const GuestSection = () => {
+const GuestSection = ({ invitationId }) => {
+  const { slug } = useParams({ from: '/$slug' });
   const { status } = useSessionContext();
+  const showAlert = useAlert();
   const [modalOpen, setModalOpen] = useState(false);
   const [formModalOpen, setFormModalOpen] = useState(false);
   const [messages, setMessages] = useState([]);
-  const showAlert = useAlert();
-  const SLUG = 'test-202512';
+  const [inv, setInv] = useState(null);
+  const baseUrl = import.meta.env.VITE_API_URL;
 
   const fetchGuestbooks = useCallback(async () => {
     try {
-      const res = await fetchApi(`/api/guestbook?slug=${SLUG}&limit=3`, 'GET');
+      const res = await fetchApi(`/api/guestbook?slug=${slug}&limit=3`, 'GET');
+
       if (res.data.success) {
+        setInv(res.data);
         setMessages(res.data.data);
       }
     } catch (e) {
       console.error(e);
     }
-  }, [SLUG]);
+  }, [slug]);
 
   useEffect(() => {
     fetchGuestbooks();
@@ -52,6 +57,7 @@ const GuestSection = () => {
       return;
     }
     if (status === 'unauthenticated') {
+      sessionStorage.setItem('return_slug', slug);
       showAlert({
         message: `카카오 로그인 후 메시지를 남겨주세요!`,
         content: '🔐',
@@ -60,7 +66,7 @@ const GuestSection = () => {
         closeOnOverlayClick: true,
         onConfirm: () => {
           const currentPath = encodeURIComponent(window.location.href);
-          window.location.href = `http://localhost:3000/api/auth/kakao?redirect=${currentPath}`;
+          window.location.href = `${baseUrl}/api/auth/kakao?redirect=${currentPath}`;
         },
       });
       return;
@@ -97,6 +103,8 @@ const GuestSection = () => {
       </div>
 
       <GuestWriteForm
+        slug={slug}
+        invitationId={invitationId}
         isOpen={formModalOpen}
         onClose={() => setFormModalOpen(false)}
         onSuccess={fetchGuestbooks}

@@ -11,17 +11,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { Route as rootRouteImport } from './routes/__root';
-import { Route as Test202512RouteImport } from './routes/test-202512';
 import { Route as SlugRouteImport } from './routes/$slug';
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback';
 
 const IndexLazyRouteImport = createFileRoute('/')();
 
-const Test202512Route = Test202512RouteImport.update({
-  id: '/test-202512',
-  path: '/test-202512',
-  getParentRoute: () => rootRouteImport,
-});
 const SlugRoute = SlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -41,7 +35,6 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
 const rootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   SlugRoute: SlugRoute,
-  Test202512Route: Test202512Route,
   AuthCallbackRoute: AuthCallbackRoute,
 };
 export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren);
