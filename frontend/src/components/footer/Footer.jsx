@@ -3,6 +3,8 @@ import { shareKakaoTalk } from '@services/kakao/share';
 import { useAlert } from '@/hooks/useAlert';
 import { CDN_URL } from '@constants/cdn';
 import '@styles/Footer.css';
+import kakaoIcon from '@/assets/img.png';
+import copyLinkIcon from '@/assets/4602047.png';
 
 const Footer = () => {
   const { Kakao } = window;
@@ -44,10 +46,10 @@ const Footer = () => {
           className="btn-kakao"
           onClick={handleKakaoShare}
         >
-          <img src="/src/assets/img.png" className="share-kakao" />
+          <img src={kakaoIcon} className="share-kakao" />
         </button>
         <button onClick={copyToClipboard} className="btn-copy">
-          <img src="/src/assets/4602047.png" className="share-link" />
+          <img src={copyLinkIcon} className="share-link" />
         </button>
       </div>
       <p className="copyright">©chaeculson</p>
