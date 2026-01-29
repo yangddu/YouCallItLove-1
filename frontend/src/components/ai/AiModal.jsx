@@ -13,7 +13,10 @@ const AiModal = ({ onClose }) => {
 
     const aiData = async () => {
       try {
-        const res = await fetchApi('/api/ai/recommend', 'GET');
+        const res = await fetchApi(
+          '/api/ai/recommend?weddingDate=2026-02-13',
+          'GET',
+        );
 
         if (!isCancelled) {
           setData(res.data.data);
@@ -57,8 +60,18 @@ const AiModal = ({ onClose }) => {
           <header className="ai-header">
             <h3>🌤️ 오늘의 하객룩 추천</h3>
             <p className="weather-info">
-              현재 서울은 <strong>{data?.weather?.temp}°C</strong>,{' '}
-              {WEATHER_DESC_KO[data?.weather?.condition]}입니다.
+              {data?.isPrediction ? (
+                <p className="notice">
+                  해당 데이터는 평년 기후 데이터를 바탕으로 한 예측치입니다.
+                </p>
+              ) : (
+                <p className="weather-info">
+                  <strong>{data?.weather?.temp}°C</strong>,{' '}
+                  {WEATHER_DESC_KO[data?.weather?.condition] ||
+                    data?.weather?.condition}
+                  입니다.
+                </p>
+              )}
             </p>
           </header>
 

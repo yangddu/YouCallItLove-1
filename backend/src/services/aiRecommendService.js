@@ -1,76 +1,89 @@
 const { OpenAI } = require("openai");
-const fetch = require("node-fetch");
 const weatherApi = require("@src/api/weatherApi");
 const ApiError = require("@src/helpers/apiError");
 
-const openai = new OpenAI({
-  apiKey: process.env.OPEN_AI_KEY,
-  fetch: fetch,
-});
+const openai = new OpenAI({ apiKey: process.env.OPEN_AI_KEY });
+
 const LAT = 37.52774918798905;
 const LNG = 126.89613398474555;
+const weatherDataCache = {};
 const CACHE_DURATION = 30 * 60 * 1000;
-let cachedData = null;
-let lastFetchTime = 0;
 
-const getWeatherAndRecommend = async () => {
-  const now = Date.now();
-  if (cachedData && now - lastFetchTime < CACHE_DURATION) {
-    return cachedData;
-  }
+const getWeatherAndRecommend = async (weddingDate) => {
   try {
-    const weatherResponse = await weatherApi("/", {
-      params: { lat: LAT, lon: LNG },
-    });
+    const now = new Date();
+    const currentTime = now.getTime();
 
-    if (!weatherResponse.data || !weatherResponse.data.main) {
-      throw new ApiError("날씨 정보를 가져오는 데 실패했습니다.", 502);
+    if (
+      weatherDataCache[weddingDate] &&
+      currentTime - weatherDataCache[weddingDate].timestamp < CACHE_DURATION
+    ) {
+      return weatherDataCache[weddingDate].data;
     }
 
-    const temp = weatherResponse.data.main.temp;
-    const condition = weatherResponse.data.weather[0].main;
+    const targetDate = new Date(weddingDate);
+    const diffDays = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
+
+    let userMessage = "";
+    let weatherData = { temp: null, condition: null };
+    let isPrediction = false;
+
+    if (diffDays <= 5 && diffDays >= -1) {
+      try {
+        const res = await weatherApi("/", { params: { lat: LAT, lon: LNG } });
+        weatherData.temp = res.data.main.temp;
+        weatherData.condition = res.data.weather[0].main;
+        isPrediction = false;
+        userMessage = `현재 예보상 기온은 ${weatherData.temp}도이고 날씨는 ${weatherData.condition}이야. 이 날씨에 맞는 코디를 추천해줘.`;
+        isPrediction = false;
+      } catch (err) {
+        isPrediction = true;
+        userMessage = `${weddingDate} 시기 서울의 평년 날씨를 예측해서 그 날씨 정보와 코디를 추천해줘.`;
+      }
+    } else {
+      isPrediction = true;
+      weatherInfo = `예식일은 ${weddingDate}이야. 아직 예보가 없으니 네가 가진 기후 데이터를 바탕으로 이 시기 서울의 평년 날씨를 예측해서 추천해줘.`;
+    }
+
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
-          content:
-            "너는 센스 있고 친절한 하객 복장 코디네이터야. 특정 성별(남/녀)을 구분하지 않고, 누구나 참고할 수 있는 젠더리스(Genderless)하고 깔끔한 하객 복장을 추천해줘. 현재 날씨 정보를 바탕으로 최적의 복장을 추천해줘. 만약 비나 눈이 오거나 기온이 급격히 낮다면, 그에 맞는 준비물(우산, 장갑, 핫팩 등) 정보도 포함해줘. 결과를 반드시 JSON 형식으로만 답해줘. 구조는 { 'top': '', 'bottom': '', 'outer': '', 'acc': '', 'reason': '' } 형식을 유지해줘. (단, 'acc' 항목에는 날씨에 따른 필수 준비물이나 액세서리를 적어줘. 'reason' 형식은 4줄 이내로 적어줘.)",
+          content: `너는 센스 있고 친절한 하객 복장 코디네이터야. 특정 성별(남/녀)을 구분하지 않고, 누구나 참고할 수 있는 젠더리스(Genderless)하고 깔끔한 하객 복장을 추천해줘. 성별 무관 젠더리스룩을 JSON으로 추천해줘. 현재 날씨 정보를 바탕으로 최적의 복장을 추천해줘. 만약 비나 눈이 오거나 기온이 급격히 낮다면, 그에 맞는 준비물(우산, 장갑, 핫팩 등) 정보도 포함해줘. 결과를 반드시 JSON 형식으로만 답해줘. 구조는 { 'top': '', 'bottom': '', 'outer': '', 'acc': '', 'reason': '' } 형식을 유지해줘. (단, 'acc' 항목에는 날씨에 따른 필수 준비물이나 액세서리를 적어줘. 'reason' 형식은 3줄 이내로 적어줘.)
+          ${
+            isPrediction
+              ? "통계적 기후 데이터를 바탕으로 해주고, '~할 것으로 예상되는 날씨입니다'라고 해줘."
+              : "실시간 예보를 바탕으로 확신있게 말해줘."
+          }`,
         },
-        {
-          role: "user",
-          content: `현재 기온은 ${temp}도이고 날씨는 ${condition}이야. 적절한 하객룩을 추천해줘.`,
-        },
+        { role: "user", content: userMessage },
       ],
       response_format: { type: "json_object" },
     });
 
-    let aiAnswer;
-    try {
-      aiAnswer = JSON.parse(completion.choices[0].message.content);
-    } catch (parseError) {
-      console.error("AI 응답 파싱 실패:", parseError);
-      throw new ApiError(
-        "AI 추천 데이터를 처리하는 중 오류가 발생했습니다.",
-        500,
-      );
-    }
-
+    const aiAnswer = JSON.parse(completion.choices[0].message.content);
     const result = {
-      weather: { temp, condition },
-      recommendation: aiAnswer,
+      weddingDate,
+      dDay: diffDays,
+      isPrediction,
+      weather: {
+        temp: aiAnswer.temp || weatherData.temp,
+        condition: aiAnswer.condition || weatherData.condition,
+      },
+      recommendation: {
+        top: aiAnswer.top,
+        bottom: aiAnswer.bottom,
+        outer: aiAnswer.outer,
+        acc: aiAnswer.acc,
+        reason: aiAnswer.reason,
+      },
     };
-    cachedData = result;
-    lastFetchTime = now;
-
+    weatherDataCache[weddingDate] = { data: result, timestamp: currentTime };
     return result;
   } catch (error) {
-    console.error(error);
-    if (error instanceof ApiError) throw error;
-    throw new ApiError("추천 서비스 오류가 발생했습니다.", 500);
+    throw new ApiError("추천 서비스 일시 중단", 500);
   }
 };
 
-module.exports = {
-  getWeatherAndRecommend,
-};
+module.exports = { getWeatherAndRecommend };

@@ -60,7 +60,7 @@
 
 .guest-list-modal-content {
   max-height: 550px;
-  height: 250px;
+  height: 400px;
 }
 
 @keyframes slideUp {
