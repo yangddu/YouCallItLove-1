@@ -14,9 +14,9 @@ const Footer = () => {
   const handleKakaoShare = () => {
     shareKakaoTalk({
       jsKey: import.meta.env.VITE_KAKAO_JS_KEY,
-      title: '우리 결혼합니다 💌',
+      title: '철수 & 민지의 특별한 날 💍',
       description: '함께 자리에 오셔서 축하해주시면 감사하겠습니다.',
-      imageUrl: `${url}/wedding/ggggg.jpeg`,
+      imageUrl: `${url}/wedding/gallery01.png`,
       webUrl: window.location.href,
     });
   };
