@@ -89,6 +89,7 @@ const MapSection = () => {
           onClick={() =>
             window.open(
               'https://map.naver.com/p/directions/-/14126011.918452,4512925.4832867,%EC%9B%A8%EC%8A%A4%ED%84%B4%EB%B2%A0%EB%8B%88%EB%B9%84%EC%8A%A4%20%EC%98%81%EB%93%B1%ED%8F%AC,1462458894,PLACE_POI/-/car?c=15.00,0,0,0,dh',
+              '_blank',
             )
           }
         >
