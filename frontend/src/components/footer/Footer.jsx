@@ -19,7 +19,8 @@ const Footer = () => {
       title: '철수 & 민지의 특별한 날 💍',
       description: '함께 자리에 오셔서 축하해주시면 감사하겠습니다.',
       imageUrl: `${url}/wedding/gallery01.png`,
-      webUrl: `${simpleUrl}`,
+      webUrl: simpleUrl,
+      mobileWebUrl: simpleUrl
     });
   };
 
