@@ -19,11 +19,14 @@ jobs:
           node-version: "20"
 
       - name: 의존성 설치 및 빌드
-        working-directory: ./frontend 
+        working-directory: ./frontend
         run: |
           npm ci
           # 중요: 빌드 시점에 환경변수 주입
           echo "${{ secrets.FRONTEND_ENV }}" > .env.production
+          echo "=== .env.production 변수 목록 ==="
+          cut -d'=' -f1 .env.production
+          echo "=== 총 라인 수: $(wc -l < .env.production) ==="
           npm run build
 
       - name: EC2 기존 파일 삭제
