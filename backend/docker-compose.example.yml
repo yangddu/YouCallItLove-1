@@ -6,8 +6,8 @@ services:
     container_name: ycil-db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: your_db_user
+      POSTGRES_PASSWORD: your_secure_password_here
       POSTGRES_DB: ycil
     ports:
       - "127.0.0.1:51213:5432"

@@ -43,7 +43,7 @@ const getGuestbookEntries = async ({ slug, limit }) => {
       message: true,
       createdAt: true,
     },
-    take: limit ? parseInt(limit) : undefined,
+    take: limit ? Math.min(Math.max(parseInt(limit) || 10, 1), 100) : undefined,
   });
 };
 

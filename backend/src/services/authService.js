@@ -1,5 +1,6 @@
 const qs = require("qs");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const {
   KAKAO_TOKEN_URL,
   KAKAO_USER_URL,
@@ -81,15 +82,41 @@ const verifyRefreshToken = (token) => {
   try {
     return jwt.verify(token, process.env.JWT_REFRESH_SECRET);
   } catch (error) {
-    console.warn("JWT Verify Error:", error.message);
     throw new ApiError("리프레시 토큰이 유효하지 않습니다.", 401);
   }
+};
+
+const SALT_ROUNDS = 10;
+
+const hashPassword = async (password) => {
+  return bcrypt.hash(password, SALT_ROUNDS);
+};
+
+const comparePassword = async (plainPassword, hashedPassword) => {
+  return bcrypt.compare(plainPassword, hashedPassword);
+};
+
+const generateAdminTokens = (user) => {
+  const accessToken = jwt.sign(
+    { userId: user.id, username: user.username, role: "ADMIN" },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" },
+  );
+  const refreshToken = jwt.sign(
+    { sub: user.id },
+    process.env.JWT_REFRESH_SECRET,
+    { expiresIn: "7d" },
+  );
+  return { accessToken, refreshToken };
 };
 
 module.exports = {
   getKakaoToken,
   getKakaoUser,
   generateTokens,
+  generateAdminTokens,
   verifyAccessToken,
   verifyRefreshToken,
+  hashPassword,
+  comparePassword,
 };

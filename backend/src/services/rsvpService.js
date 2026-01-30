@@ -4,7 +4,7 @@ const ApiError = require("@src/helpers/apiError");
 const rsvpEntries = async (prisma, slug) => {
   const invitation = await prisma.invitation.findUnique({
     where: { slug },
-    select: { id: true, isPlblic: true },
+    select: { id: true, isPublic: true },
   });
 
   if (!invitation || !invitation.isPublic) {

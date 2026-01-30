@@ -1,5 +1,6 @@
 const { prisma } = require("@src/lib/db");
-const ApiError = require("@src/middlewares/error");
+const ApiError = require("@src/helpers/apiError");
+const authService = require("@services/authService");
 
 const getAdminProfile = (user) => {
   return {
@@ -72,7 +73,7 @@ const refreshSession = async (oldToken) => {
   if (!user || user.refreshToken !== oldToken)
     throw new ApiError("유효하지 않거나 만료된 세션입니다.", 403);
 
-  const tokens = authService.generateTokens(user);
+  const tokens = authService.generateAdminTokens(user);
   await prisma.adminUser.update({
     where: { id: user.id },
     data: { refreshToken: tokens.refreshToken },

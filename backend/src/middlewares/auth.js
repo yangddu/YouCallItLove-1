@@ -1,3 +1,7 @@
+const jwt = require("jsonwebtoken");
+const { prisma } = require("@src/lib/db");
+const { sendError } = require("@src/helpers/responseHelper");
+
 const verifyToken = (req, res, next) => {
   try {
     const token = req.cookies.accessToken;
@@ -58,15 +62,18 @@ const requireAuth = async (req, res, next) => {
 
 const authenticate = (req, res, next) => {
   const token = req.cookies.accessToken;
+  if (!token) {
+    req.user = null;
+    return next();
+  }
   try {
-    const user = verifyToken(token);
-    req.user = user;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
     next();
   } catch (error) {
-    if (error.status === 401) {
-      res.clearCookie("accessToken", { path: "/" });
-    }
-    next(error);
+    res.clearCookie("accessToken", { path: "/" });
+    req.user = null;
+    next();
   }
 };
 

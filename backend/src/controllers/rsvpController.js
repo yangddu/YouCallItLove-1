@@ -1,6 +1,7 @@
 const { sendSuccess } = require("@src/helpers/responseHelper");
 const rsvpService = require("@services/rsvpService");
 const asyncHelper = require("@src/helpers/asyncHelper");
+const ApiError = require("@src/helpers/apiError");
 
 const getList = asyncHelper(async (req, res, next) => {
   const { slug } = req.query;

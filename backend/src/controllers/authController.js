@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const authService = require("@services/authService");
 const { sendSuccess } = require("@src/helpers/responseHelper");
 const asyncHelper = require("@src/helpers/asyncHelper");
+const ApiError = require("@src/helpers/apiError");
 
 const {
   KAKAO_AUTH_URL,
@@ -37,7 +38,10 @@ const kakaoCallback = asyncHelper(async (req, res) => {
   res.cookie("accessToken", accessToken, cookieOptions);
   res.cookie("refreshToken", refreshToken, cookieOptions);
 
-  const frontendUrl = process.env.FRONTEND_URL || "https://our-0613.co.kr";
+  const frontendUrl = process.env.FRONTEND_URL;
+  if (!frontendUrl) {
+    throw new ApiError("FRONTEND_URL 환경변수가 설정되지 않았습니다.", 500);
+  }
   return res.redirect(`${frontendUrl}/auth/callback`);
 });
 

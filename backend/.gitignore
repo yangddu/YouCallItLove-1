@@ -2,4 +2,7 @@ node_modules
 # Keep environment variables out of version control
 .env
 
+# Docker 설정 (민감 정보 포함)
+docker-compose.yml
+
 /generated/prisma
