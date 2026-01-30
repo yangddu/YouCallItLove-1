@@ -3,9 +3,10 @@ export function initKakao(key) {
         throw new Error('Kakao SDK not loaded');
     }
 
-    if (!window.Kakao.isInitialized()) {
-        window.Kakao.init(key);
+    if (window.Kakao.isInitialized()) {
+        window.Kakao.cleanup();
     }
+    window.Kakao.init(key);
 
     return window.Kakao;
 }

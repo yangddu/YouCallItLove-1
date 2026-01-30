@@ -11,7 +11,8 @@ const Footer = () => {
   const url = CDN_URL;
   const showAlert = useAlert();
 
-  const simpleUrl = import.meta.env.VITE_SITE_URL;
+  const simpleUrl =
+    import.meta.env.VITE_SITE_URL || 'https://our-0613.co.kr/our-0613';
 
   const handleKakaoShare = () => {
     shareKakaoTalk({
@@ -61,4 +62,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
