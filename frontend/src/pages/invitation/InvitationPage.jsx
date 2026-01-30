@@ -5,8 +5,7 @@ import MainPage from '@pages/main/MainPage';
 import { useParams } from '@tanstack/react-router';
 
 const InvitationPage = () => {
-  const { slug: urlSlug } = useParams({ from: '/$slug' });
-  const slug = urlSlug;
+  const { slug } = useParams({ from: '/$slug' });
   const [data, setData] = useState({
     loading: true,
     inv: null,

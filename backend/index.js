@@ -25,7 +25,7 @@ if (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) {
 }
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.split(",").map((o) => o.trim()).filter(Boolean)
@@ -73,13 +73,6 @@ const authLimiter = rateLimit({
 });
 app.use("/api/auth/user/login", authLimiter);
 app.use("/api/auth/user/signup", authLimiter);
-
-// 방명록 쓰기 rate limiting (분당 5회)
-const writeLimiter = rateLimit({
-  windowMs: 60_000,
-  max: 5,
-  message: { success: false, message: "요청이 너무 많습니다. 잠시 후 다시 시도해주세요." },
-});
 
 app.get("/health", (_, res) => res.json({ ok: true }));
 

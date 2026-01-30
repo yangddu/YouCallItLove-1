@@ -60,7 +60,9 @@ const clearSession = async (refreshToken) => {
       data: { isLoggedIn: false, refreshToken: null },
     });
   } catch (e) {
-    console.warn("clearSession 에러:", e.message);
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("clearSession 에러:", e.message);
+    }
   }
 };
 

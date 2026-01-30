@@ -45,7 +45,7 @@ function useAuthCheck() {
         await fetchApi("/auth/verify-token", "POST");
         setIsAuthenticated(true);
       } catch (error) {
-        console.log("토큰 인증 실패: ", error);
+        // 토큰 인증 실패 시 비로그인 처리
         setIsAuthenticated(false);
       }
     };

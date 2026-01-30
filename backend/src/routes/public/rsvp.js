@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const rsvpController = require("@controllers/rsvpController");
-const createXssFilter = require("../../../middleware/xssFilter");
-const createPhoneValidator = require("../../../middleware/phoneValidator");
+const createXssFilter = require("@src/middlewares/xssFilter");
+const createPhoneValidator = require("@src/middlewares/phoneValidator");
 
 router.get("/", rsvpController.getList);
 

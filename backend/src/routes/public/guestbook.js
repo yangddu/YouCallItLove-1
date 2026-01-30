@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const rateLimit = require("express-rate-limit");
 const guestbookController = require("@controllers/guestbookController");
-const createXssFilter = require("../../../middleware/xssFilter");
-const createInputLengthLimit = require("../../../middleware/inputLengthLimit");
+const createXssFilter = require("@src/middlewares/xssFilter");
+const createInputLengthLimit = require("@src/middlewares/inputLengthLimit");
 
 const writeRateLimiter = rateLimit({
   windowMs: 60_000,

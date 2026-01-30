@@ -1,43 +1,54 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import '@styles/Calendar.css';
 
-const CalendarSection = () => {
-  const weddingDate = new Date('2026-02-13T15:30:30');
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+const CalendarSection = ({ weddingDate: weddingDateStr = '2026-02-13T15:30:30' }) => {
+  const weddingDate = useMemo(() => new Date(weddingDateStr), [weddingDateStr]);
 
-  function calculateTimeLeft() {
+  const calculateTimeLeft = () => {
     const difference = +weddingDate - +new Date();
-    let timeLeft = {};
+    if (difference <= 0) return null;
+    return {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+      seconds: Math.floor((difference / 1000) % 60),
+    };
+  };
 
-    if (difference > 0) {
-      timeLeft = {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-      };
-    }
-    return timeLeft;
-  }
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+    if (!timeLeft) return;
 
-  const days = [31, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+    const timer = setInterval(() => {
+      const next = calculateTimeLeft();
+      setTimeLeft(next);
+      if (!next) clearInterval(timer);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [weddingDate]);
+
+  const month = weddingDate.getMonth() + 1;
+  const weddingDay = weddingDate.getDate();
+  const startDay = new Date(weddingDate);
+  startDay.setDate(weddingDay - 13);
+
+  const days = Array.from({ length: 14 }, (_, i) => {
+    const d = new Date(startDay);
+    d.setDate(startDay.getDate() + i);
+    return d.getDate();
+  });
 
   return (
     <section className="calendar-container">
-      <div className="calendar-month">2</div>
+      <div className="calendar-month">{month}</div>
 
       <div className="calendar-grid">
         {days.map((day, index) => (
           <div
             key={index}
-            className={`calendar-day ${day === 13 ? 'wedding-day' : ''}`}
+            className={`calendar-day ${day === weddingDay ? 'wedding-day' : ''}`}
           >
             {day}
           </div>
@@ -45,9 +56,15 @@ const CalendarSection = () => {
       </div>
 
       <div className="countdown-timer">
-        {timeLeft.days} : {String(timeLeft.hours).padStart(2, '0')} :{' '}
-        {String(timeLeft.minutes).padStart(2, '0')} :{' '}
-        {String(timeLeft.seconds).padStart(2, '0')}
+        {timeLeft ? (
+          <>
+            {timeLeft.days} : {String(timeLeft.hours).padStart(2, '0')} :{' '}
+            {String(timeLeft.minutes).padStart(2, '0')} :{' '}
+            {String(timeLeft.seconds).padStart(2, '0')}
+          </>
+        ) : (
+          'Today!'
+        )}
       </div>
 
       <p className="countdown-label">DAYS UNTIL THE WEDDING</p>

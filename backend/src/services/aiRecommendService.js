@@ -4,24 +4,45 @@ const ApiError = require("@src/helpers/apiError");
 
 const openai = new OpenAI({ apiKey: process.env.OPEN_AI_KEY });
 
-const LAT = 37.52774918798905;
-const LNG = 126.89613398474555;
-const weatherDataCache = {};
+const LAT = process.env.VENUE_LAT || 37.52774918798905;
+const LNG = process.env.VENUE_LNG || 126.89613398474555;
 const CACHE_DURATION = 30 * 60 * 1000;
+const MAX_CACHE_SIZE = 100;
+const weatherDataCache = new Map();
+
+const cleanupCache = () => {
+  const now = Date.now();
+  for (const [key, value] of weatherDataCache) {
+    if (now - value.timestamp > CACHE_DURATION) {
+      weatherDataCache.delete(key);
+    }
+  }
+  if (weatherDataCache.size > MAX_CACHE_SIZE) {
+    const oldest = [...weatherDataCache.entries()]
+      .sort((a, b) => a[1].timestamp - b[1].timestamp);
+    for (let i = 0; i < oldest.length - MAX_CACHE_SIZE; i++) {
+      weatherDataCache.delete(oldest[i][0]);
+    }
+  }
+};
 
 const getWeatherAndRecommend = async (weddingDate) => {
   try {
     const now = new Date();
     const currentTime = now.getTime();
 
-    if (
-      weatherDataCache[weddingDate] &&
-      currentTime - weatherDataCache[weddingDate].timestamp < CACHE_DURATION
-    ) {
-      return weatherDataCache[weddingDate].data;
+    cleanupCache();
+
+    const cached = weatherDataCache.get(weddingDate);
+    if (cached && currentTime - cached.timestamp < CACHE_DURATION) {
+      return cached.data;
     }
 
     const targetDate = new Date(weddingDate);
+    if (isNaN(targetDate.getTime())) {
+      throw new ApiError("유효하지 않은 날짜 형식입니다.", 400);
+    }
+
     const diffDays = Math.ceil((targetDate - now) / (1000 * 60 * 60 * 24));
 
     let userMessage = "";
@@ -35,14 +56,13 @@ const getWeatherAndRecommend = async (weddingDate) => {
         weatherData.condition = res.data.weather[0].main;
         isPrediction = false;
         userMessage = `현재 예보상 기온은 ${weatherData.temp}도이고 날씨는 ${weatherData.condition}이야. 이 날씨에 맞는 코디를 추천해줘.`;
-        isPrediction = false;
       } catch (err) {
         isPrediction = true;
         userMessage = `${weddingDate} 시기 서울의 평년 날씨를 예측해서 그 날씨 정보와 코디를 추천해줘.`;
       }
     } else {
       isPrediction = true;
-      weatherInfo = `예식일은 ${weddingDate}이야. 아직 예보가 없으니 네가 가진 기후 데이터를 바탕으로 이 시기 서울의 평년 날씨를 예측해서 추천해줘.`;
+      userMessage = `예식일은 ${weddingDate}이야. 아직 예보가 없으니 네가 가진 기후 데이터를 바탕으로 이 시기 서울의 평년 날씨를 예측해서 추천해줘.`;
     }
 
     const completion = await openai.chat.completions.create({
@@ -79,9 +99,10 @@ const getWeatherAndRecommend = async (weddingDate) => {
         reason: aiAnswer.reason,
       },
     };
-    weatherDataCache[weddingDate] = { data: result, timestamp: currentTime };
+    weatherDataCache.set(weddingDate, { data: result, timestamp: currentTime });
     return result;
   } catch (error) {
+    if (error instanceof ApiError) throw error;
     throw new ApiError("추천 서비스 일시 중단", 500);
   }
 };

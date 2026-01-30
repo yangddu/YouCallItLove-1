@@ -14,15 +14,12 @@ const GuestSection = ({ invitationId }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [formModalOpen, setFormModalOpen] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [inv, setInv] = useState(null);
-  const baseUrl = import.meta.env.VITE_API_URL;
 
   const fetchGuestbooks = useCallback(async () => {
     try {
       const res = await fetchApi(`/api/guestbook?slug=${slug}&limit=3`, 'GET');
 
       if (res.data.success) {
-        setInv(res.data);
         setMessages(res.data.data);
       }
     } catch (e) {
@@ -66,7 +63,7 @@ const GuestSection = ({ invitationId }) => {
         closeOnOverlayClick: true,
         onConfirm: () => {
           const currentPath = encodeURIComponent(window.location.href);
-          window.location.href = `${baseUrl}/api/auth/kakao?redirect=${currentPath}`;
+          window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/kakao?redirect=${currentPath}`;
         },
       });
       return;

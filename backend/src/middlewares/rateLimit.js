@@ -1,7 +1,17 @@
 const WINDOW_MS = 60 * 1000;
 const MAX_REQUESTS = 30;
+const CLEANUP_INTERVAL = 5 * 60 * 1000;
 
 const ipStore = new Map();
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, record] of ipStore) {
+    if (now - record.start > WINDOW_MS) {
+      ipStore.delete(ip);
+    }
+  }
+}, CLEANUP_INTERVAL);
 
 const rateLimit = (req, res, next) => {
   const now = Date.now();

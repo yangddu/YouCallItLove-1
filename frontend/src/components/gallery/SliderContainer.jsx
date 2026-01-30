@@ -9,10 +9,9 @@ import { Navigation } from 'swiper/modules';
 import { CDN_URL } from '@/constants/cdn';
 
 const SliderContainer = () => {
-  const CDN = CDN_URL;
   const items = [
-    { src: `${CDN}/wedding/gallery01.png` },
-    { src: `${CDN}/wedding/gallery02.png` },
+    { src: `${CDN_URL}/wedding/gallery01.png` },
+    { src: `${CDN_URL}/wedding/gallery02.png` },
   ];
   return (
     <>

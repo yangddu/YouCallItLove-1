@@ -23,7 +23,7 @@ const MapSection = () => {
     }
   }, []);
 
-  const handleCopy = (text, message) => {
+  const handleCopy = (text) => {
     navigator.clipboard
       .writeText(text)
       .then(() => {

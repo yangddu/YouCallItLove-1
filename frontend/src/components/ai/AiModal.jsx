@@ -3,7 +3,7 @@ import { fetchApi } from '@/feature/api/fetchApi';
 import { WEATHER_DESC_KO } from '@/constants/weather';
 import '@styles/AiModal.css';
 
-const AiModal = ({ onClose }) => {
+const AiModal = ({ onClose, weddingDate = '2026-02-13' }) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -14,7 +14,7 @@ const AiModal = ({ onClose }) => {
     const aiData = async () => {
       try {
         const res = await fetchApi(
-          '/api/ai/recommend?weddingDate=2026-02-13',
+          `/api/ai/recommend?weddingDate=${encodeURIComponent(weddingDate)}`,
           'GET',
         );
 
