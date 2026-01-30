@@ -45,13 +45,13 @@ const Footer = () => {
   return (
     <div className="share-container">
       <div className="share-button-content">
-        <button
+        {/* <button
           id="kakao-link-btn"
           className="btn-kakao"
           onClick={handleKakaoShare}
         >
           <img src={kakaoIcon} className="share-kakao" />
-        </button>
+        </button> */}
         <button onClick={copyToClipboard} className="btn-copy">
           <img src={copyLinkIcon} className="share-link" />
         </button>
