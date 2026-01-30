@@ -11,18 +11,20 @@ const Footer = () => {
   const url = CDN_URL;
   const showAlert = useAlert();
 
+  const siteUrl = import.meta.env.VITE_SITE_URL || window.location.origin;
+
   const handleKakaoShare = () => {
     shareKakaoTalk({
       jsKey: import.meta.env.VITE_KAKAO_JS_KEY,
       title: '철수 & 민지의 특별한 날 💍',
       description: '함께 자리에 오셔서 축하해주시면 감사하겠습니다.',
       imageUrl: `${url}/wedding/gallery01.png`,
-      webUrl: window.location.href,
+      webUrl: `${siteUrl}${window.location.pathname}`,
     });
   };
 
   const copyToClipboard = () => {
-    const url = window.location.href;
+    const url = `${siteUrl}${window.location.pathname}`;
 
     navigator.clipboard
       .writeText(url)
