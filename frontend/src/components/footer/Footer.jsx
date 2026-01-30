@@ -11,7 +11,7 @@ const Footer = () => {
   const url = CDN_URL;
   const showAlert = useAlert();
 
-  const simpleUrl = window.location.href;
+  const simpleUrl = import.meta.env.VITE_SITE_URL;
 
   const handleKakaoShare = () => {
     shareKakaoTalk({
@@ -20,12 +20,12 @@ const Footer = () => {
       description: '함께 자리에 오셔서 축하해주시면 감사하겠습니다.',
       imageUrl: `${url}/wedding/gallery01.png`,
       webUrl: simpleUrl,
-      mobileWebUrl: simpleUrl
+      mobileWebUrl: simpleUrl,
     });
   };
 
   const copyToClipboard = () => {
-    const url = `${simpleUrl}`;
+    const url = simpleUrl;
 
     navigator.clipboard
       .writeText(url)
